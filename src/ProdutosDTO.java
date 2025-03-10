@@ -1,48 +1,39 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author Adm
- */
 public class ProdutosDTO {
-    private Integer id;
+    private long id; // Alterado para 'long'
     private String nome;
-    private Integer valor;
+    private int valor;
     private String status;
 
-    public Integer getId() {
-        return id;
+    // Getters e Setters
+    public long getId() {
+        return id; // Alterado para 'long'
+    }
+
+    public void setId(long id) {
+        this.id = id; // Alterado para 'long'
     }
 
     public String getNome() {
         return nome;
     }
 
-    public Integer getValor() {
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getValor() {
         return valor;
+    }
+
+    public void setValor(int valor) {
+        this.valor = valor;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setValor(Integer valor) {
-        this.valor = valor;
-    }
-
     public void setStatus(String status) {
         this.status = status;
     }
-    
 }
