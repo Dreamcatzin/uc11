@@ -1,16 +1,16 @@
 public class ProdutosDTO {
-    private long id; // Alterado para 'long'
+    private int id;
     private String nome;
-    private int valor;
+    private double valor; // Mudança para double, pois o valor do produto pode ser decimal
     private String status;
 
     // Getters e Setters
-    public long getId() {
-        return id; // Alterado para 'long'
+    public int getId() {
+        return id;
     }
 
-    public void setId(long id) {
-        this.id = id; // Alterado para 'long'
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -21,11 +21,11 @@ public class ProdutosDTO {
         this.nome = nome;
     }
 
-    public int getValor() {
+    public double getValor() {
         return valor;
     }
 
-    public void setValor(int valor) {
+    public void setValor(double valor) {  // Modificado para aceitar valor decimal
         this.valor = valor;
     }
 

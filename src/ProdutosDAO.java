@@ -3,54 +3,52 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProdutosDAO {
-    Connection conn;
-    PreparedStatement prep;
-    ResultSet resultset;
-    ArrayList<ProdutosDTO> listagem = new ArrayList<>();
 
-    // Método para cadastrar um produto
-    public void cadastrarProduto(ProdutosDTO produto) {
-        conn = new conectaDAO().connectDB();
-        String sql = "INSERT INTO produtos (nome, valor, status) VALUES (?, ?, ?)";
+    // Método para conexão com o banco de dados
+    private Connection connectDB() throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/seu_banco"; // Modifique a URL conforme necessário
+        String user = "seu_usuario"; // Seu usuário
+        String password = "sua_senha"; // Sua senha
 
-        try {
-            prep = conn.prepareStatement(sql);
-            prep.setString(1, produto.getNome());
-            prep.setInt(2, produto.getValor());
-            prep.setString(3, produto.getStatus());
-            prep.executeUpdate();
+        // Retorna a conexão com o banco de dados
+        return DriverManager.getConnection(url, user, password);
+    }
 
-            JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Erro ao cadastrar produto: " + erro.getMessage());
+    // Método para vender um produto
+    public void venderProduto(int produtoId) throws SQLException {
+        String query = "UPDATE produtos SET status = 'Vendido' WHERE id = ?";
+
+        try (Connection conn = connectDB(); 
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, produtoId);
+            stmt.executeUpdate();
         }
     }
 
-    // Método para listar os produtos cadastrados
-    public ArrayList<ProdutosDTO> listarProdutos() {
-        listagem.clear(); // Limpa a lista antes de adicionar novos produtos
-        conn = new conectaDAO().connectDB();
-        String sql = "SELECT * FROM produtos";
+    // Método para listar todos os produtos vendidos
+    public List<ProdutosDTO> listarProdutosVendidos() throws SQLException {
+        String query = "SELECT * FROM produtos WHERE status = 'Vendido'";
+        List<ProdutosDTO> produtosVendidos = new ArrayList<>();
 
-        try {
-            prep = conn.prepareStatement(sql);
-            resultset = prep.executeQuery();
+        try (Connection conn = connectDB(); 
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
 
-            while (resultset.next()) {
+            while (rs.next()) {
                 ProdutosDTO produto = new ProdutosDTO();
-                produto.setId(resultset.getLong("id")); // Corrigido para 'long'
-                produto.setNome(resultset.getString("nome"));
-                produto.setValor(resultset.getInt("valor"));
-                produto.setStatus(resultset.getString("status"));
-                listagem.add(produto);
+                produto.setId(rs.getInt("id"));
+                produto.setNome(rs.getString("nome"));
+                produto.setValor(rs.getDouble("valor")); // Usando getDouble para valores monetários
+                produto.setStatus(rs.getString("status"));
+                produtosVendidos.add(produto);
             }
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar produtos: " + erro.getMessage());
         }
-        return listagem;
+
+        return produtosVendidos;
     }
 }
