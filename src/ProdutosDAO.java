@@ -63,6 +63,7 @@ public ArrayList<ProdutosDTO> listarProdutos() {
     }
     return listagem;
 }
+
     // Método para vender um produto, alterando seu status para "Vendido"
     public void venderProduto(int id) {
         Connection conn = connectDB();
